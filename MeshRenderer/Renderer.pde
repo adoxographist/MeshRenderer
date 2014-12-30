@@ -41,6 +41,11 @@ class Renderer
     lightList.add(pLight);
   }
   
+  public void removeLight(Light pLight)
+  {
+    lightList.remove(pLight);
+  }
+  
   public void drawMeshes()
   {
     while(this.renderQueue.peekFirst() != null)
@@ -51,6 +56,7 @@ class Renderer
   
   private void drawMesh(Mesh pMesh)
   {
+    pMesh.applyTransformations(camera.rotation, camera.position.neg());
     Vector3 oldScale = new Vector3(0);
     oldScale.copy(pMesh.scale);
     
@@ -58,7 +64,7 @@ class Renderer
     {
       pMesh.scale(new Vector3(camera.focalLength / (pMesh.position.z - camera.position.z)));
     }
-    pMesh.applyTransformations(camera.rotation, camera.position.neg());
+    
     
     
     for(int i = 0 ; i < pMesh.triangles.length; i += 0)
@@ -109,9 +115,7 @@ class Renderer
         }
         else
         {
-          //fill(lambertianShading(calcNormal(p1, p2, p3), mesh.objectCol));
-          //stroke(255,0,0);
-          fill(255,255,255,0);
+          fill(lambertianShading(calcNormal(p1, p2, p3), pMesh.objectCol));
           triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
         }
       }

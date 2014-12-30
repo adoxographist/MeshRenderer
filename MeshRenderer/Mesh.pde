@@ -11,6 +11,7 @@ class Mesh
   float animationSpeed;
   float curFrame;
   boolean loop;
+  boolean ascending;
   String animationMode;
   float[] uvCoords;
   Vector3 rotation;
@@ -72,9 +73,18 @@ class Mesh
     isAnimated = true;
     animation = pAnimation;
     animationSpeed = pAnimationSpeed;
-    curFrame = 0;
     loop = pLoop;
     animationMode = pAnimationMode;
+    if(animationMode == "reverse")
+    {
+      curFrame = animation[0] * animation[1];
+      ascending = false;
+    }
+    else
+    {
+      curFrame = 0;
+      ascending = true;
+    }
   }
   
   Mesh(Vector3[] pVertices, int[] pTriangles, PImage pTexture, float[] pUvCoords, boolean pIs2D)
@@ -118,7 +128,13 @@ class Mesh
     animationMode = pAnimationMode;
     if(animationMode == "reverse")
     {
-      curFrame = animation[0] * aniamtion[1];
+      curFrame = animation[0] * animation[1];
+      ascending = false;
+    }
+    else
+    {
+      curFrame = 0;
+      ascending = true;
     }
   }
   
@@ -335,20 +351,45 @@ class Mesh
     
     int w = this.texture.width / this.animation[0];
     int h = this.texture.height / this.animation[1];
-    int x = (int)(this.curFrame) % this.animation[0] * w;
-    int y = (int)(this.curFrame) / this.animation[1] * h;
+    int x = (int)abs(this.curFrame) % this.animation[0] * w;
+    int y = (int)abs(this.curFrame) / this.animation[1] * h;
     
     PImage img = this.texture.get(x, y, w, h);
     
-    if(this.curFrame > this.animation[0] * this.animation[1] && loop)
+    if(this.curFrame > this.animation[0] * this.animation[1]-1 && ascending)
     {
-      this.curFrame -= this.animation[0] * this.animation[1];
+      if(animationMode == "pingpong")
+      {
+        ascending = false;
+      }
+      else if(animationMode == "normal" && loop)
+      {
+        this.curFrame -= this.animation[0] * this.animation[1];
+      }
     }
-    else if(loop)
+    else if(this.curFrame < 0 && !ascending)
     {
-      this.curFrame += this.animationSpeed;
+      if(animationMode == "pingpong" && loop)
+      {
+        ascending = true;
+      }
+      else if(animationMode == "reverse" && loop)
+      {
+        this.curFrame += this.animation[0] * this.animation[1];
+      }
     }
-    
+    else
+    {
+      if(ascending)
+      {
+        this.curFrame += this.animationSpeed;
+      }
+      else
+      {
+        this.curFrame -= this.animationSpeed;
+      }
+    }
+    println(curFrame);
     return img;
   }
 }
