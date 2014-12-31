@@ -102,8 +102,10 @@ class Renderer
       {
         if(pMesh.isTextured)
         {
-          PImage tTex = pMesh.getTexture(true);
-          tint(lambertianShading(pMesh.normals[i/3 - 1], color(255,255,255)));
+          PImage tImage = pMesh.getTexture(true);
+          PImage tTex = pMesh.getTexture(true);//createImage(tImage.width, tImage.height, color(255,255,255));
+          //tTex.copy(tImage, 0, 0, tImage.width, tImage.height, 0, 0, tImage.width, tImage.height);
+          tint(lambertianShading(pMesh.normals[i/3 - 1],color(255,255,255)));// tTex, uv1, uv2, uv3);
           int h = tTex.height;
           int w = tTex.width;
           beginShape();
@@ -168,5 +170,27 @@ class Renderer
       ret += color(intensity * (brightness(pObjectCol) + brightness(((Light)(lightList.get(i))).lColor)) + brightness(ambientCol));
     }
     return ret;
+  }
+  
+  private void lambertianShading(Vector3 pNormal, PImage pImage, float[] pUV1, float[] pUV2, float[] pUV3)
+  {
+    color ret = color(0, 0, 0);
+    int s = lightList.size();
+    float a = 255 / (pImage.width * pImage.height);
+    
+    for(int i = 0; i < s; i++)
+    {
+      float intensity = (((Light)(lightList.get(i))).getDirection().dotProduct(pNormal));
+      ret += color(intensity * (brightness(color(255,255,255)) + brightness(((Light)(lightList.get(i))).lColor)) + brightness(ambientCol));
+    }
+    for(int x = 0; x < pImage.width; x++)
+    {
+      for(int y = 0; y < pImage.height; y++)
+      {
+        pImage.pixels[y * pImage.width + x] += color(a *(y*pImage.width + x),0,0);//(pUV1[0]*pImage.width - x) ,0,0);// (sq(x - pUV2[0]*pImage.width) + sq(y - pUV2[1]*pImage.height)) / (pImage.width * pImage.height) * 255, (sq(x - pUV3[0]*pImage.width) + sq(y - pUV3[1]*pImage.height)) / (pImage.width * pImage.height) * 255);
+        a++;
+      }
+    }
+    pImage.updatePixels();
   }
 }

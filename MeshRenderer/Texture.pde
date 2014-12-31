@@ -35,7 +35,7 @@ class Texture
     isAnimated = false;
   }
   
-   public void convertBlackToAlpha(float pThreshold)
+  public void convertBlackToAlpha(float pThreshold)
   {
     PImage img = createImage(this.image.width, this.image.height, ARGB);
     
@@ -49,6 +49,11 @@ class Texture
     }
     img.updatePixels();
     this.image = img;
+  }
+  
+  public void convertBlackToAlpha()
+  {
+    this.convertBlackToAlpha(1);
   }
   
   public void alphaCutoff(float pThreshold)
@@ -84,9 +89,8 @@ class Texture
   {
     if(!animationStep || !isAnimated)
     {
-      this.getImage();
+      return this.getImage();
     }
-    
     int w = this.image.width / this.animation[0];
     int h = this.image.height / this.animation[1];
     int x = (int)abs(this.curFrame) % this.animation[0] * w;

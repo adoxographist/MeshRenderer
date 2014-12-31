@@ -14,7 +14,6 @@ float fLength = 100;
 Camera cam = new Camera(fLength, false);
 
 Renderer render;
-
 void setup()
 {
   size(500, 500, P2D);
@@ -22,8 +21,10 @@ void setup()
   render = new Renderer(cam, ambientCol);
   render.addLight(l);
   int[] anim = {4,4};
-  s = new Sprite(new Vector3(50, 0, 200), 0, new Vector3(100), loadImage("walk.png"), anim, 0.2, "normal", true);
-  p = new Plane(new Vector3(50, 0, 200), new Vector3(0), new Vector3(200), loadImage("tex.png"));
+  int[] anim2 = {6,5};
+  s = new Sprite(new Vector3(50, 0, 200), 0, new Vector3(100), loadImage("walk2.png"), anim2, 0.05, "normal", true);
+  s.mesh.texture.convertBlackToAlpha();
+  p = new Plane(new Vector3(50, 0, 500), new Vector3(0), new Vector3(200), loadImage("walk.png"), anim, 0.15, "normal", true);
   c = new Cube(new Vector3(0, 100, 150), new Vector3(0), new Vector3(100), tex);
   c1 = new Cube(new Vector3(10, 0, 100), new Vector3(0), new Vector3(100), tex);
   d = new Disk(160, new Vector3(10, 0, 50), new Vector3(0,0,0), new Vector3(100), tex);
@@ -35,17 +36,17 @@ void draw()
   
   background(ambientCol);
   render.addToQueue(s.mesh);
-  //render.addToQueue(p.mesh);
-  /*render.addToQueue(c1.mesh);
-  render.addToQueue(c.mesh);
+  render.addToQueue(p.mesh);
+  //render.addToQueue(c1.mesh);
+  /*render.addToQueue(c.mesh);
   render.addToQueue(d.mesh);*/
   render.drawMeshes();
-  s.mesh.rotate(new Vector3(0, 1, -1));
+  //s.mesh.rotate(new Vector3(0, 1, -1));
   //c.mesh.rotate(new Vector3(1,0,-1));
   /*p.mesh.rotate(new Vector3(0, 0, -1));
   d.mesh.rotate(new Vector3(0,0,1));*/
-  //mesh.translate(new Vector3(0,0, 50)); //what?! orthogonal!!
-  //c1.mesh.rotate(new Vector3(0, 0, 1));
+  //mesh.translate(new Vector3(0,0, 50));
+  //c1.mesh.rotate(new Vector3(1, 0, 1));
   mouseLook(cam);
 }
 
