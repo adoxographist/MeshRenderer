@@ -33,10 +33,9 @@ void setup()
 
 void draw()
 {
-  
   background(ambientCol);
-  render.addToQueue(s.mesh);
-  render.addToQueue(p.mesh);
+  //render.addToQueue(s.mesh);
+  //render.addToQueue(p.mesh);
   //render.addToQueue(c1.mesh);
   /*render.addToQueue(c.mesh);
   render.addToQueue(d.mesh);*/

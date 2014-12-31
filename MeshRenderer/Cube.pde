@@ -38,6 +38,7 @@ class Cube
                     0, 1, 1, 1, 1, 0,
                     0, 1, 0, 0, 1, 0,
                     0, 1, 1, 1, 1, 0};
+                    
      this.mesh = new Mesh(verts, tris, pTexture, uv);
      this.mesh.setPosition(pPosition);
      this.mesh.setRotation(pRotation);
@@ -80,6 +81,7 @@ class Cube
                     0, 1, 1, 1, 1, 0,
                     0, 1, 0, 0, 1, 0,
                     0, 1, 1, 1, 1, 0};
+                    
      this.mesh = new Mesh(verts, tris, pTexture, uv, pAnimation, pAnimationSpeed, pAnimationMode, pLoop);
      this.mesh.setPosition(pPosition);
      this.mesh.setRotation(pRotation);

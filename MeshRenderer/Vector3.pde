@@ -3,6 +3,7 @@ class Vector3
   float x;
   float y;
   float z;
+  
   public Vector3(int pX, int pY, int pZ)
   {
     x = (float)pX;
@@ -63,7 +64,7 @@ class Vector3
    
   public Vector3 neg()
   {
-    return new Vector3(-this.x, -this.y, -this.z);
+    return this.dotProduct(-1);
   }
   
   public Vector3 angleToVector()
