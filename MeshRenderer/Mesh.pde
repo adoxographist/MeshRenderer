@@ -2,6 +2,7 @@ class Mesh
 {
   private Vector3[] vertices;
   Vector3[] publicVertices;
+  Vector3[] normals;
   int[] triangles;
   boolean isTextured;
   color objectCol;
@@ -86,6 +87,7 @@ class Mesh
   {
     vertices = pVertices;
     triangles = pTriangles;
+    normals = new Vector3[triangles.length / 3];
     rotation = new Vector3(0);
     position = new Vector3(0);
     scale = new Vector3(1);
@@ -246,6 +248,24 @@ class Mesh
         publicVertices[i].x += width / 2;
         publicVertices[i].y += height / 2;
       }
+  }
+  
+  public void calcNormals()
+  {
+    for(int i = 0; i < triangles.length; i+=3)
+    {
+      Vector3 point1 = publicVertices[triangles[i]];
+      Vector3 point2 = publicVertices[triangles[i+1]];
+      Vector3 point3 = publicVertices[triangles[i+2]];
+      Vector3 vecAB = new Vector3(point2.x - point1.x, point2.y - point1.y, point2.z - point1.z);
+      Vector3 vecAC = new Vector3(point3.x - point1.x, point3.y - point1.y, point3.z - point1.z);
+      
+      Vector3 normal = vecAC.crossProduct(vecAB);
+      
+      normal.normalize();
+      
+      normals[i/3] = normal;
+    }
   }
   
   public PImage getTexture()

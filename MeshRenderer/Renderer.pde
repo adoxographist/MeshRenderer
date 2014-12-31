@@ -65,7 +65,7 @@ class Renderer
       pMesh.scale(new Vector3(camera.focalLength / (pMesh.position.z - camera.position.z)));
     }
     
-    
+    pMesh.calcNormals();
     
     for(int i = 0 ; i < pMesh.triangles.length; i += 0)
     {
@@ -98,12 +98,12 @@ class Renderer
         p3 = point3;
       }
       
-      if(normalTest(p1, p2, p3) && clampToView(p1, p2, p3))
+      if(normalTest(pMesh, i/3 - 1) && clampToView(p1, p2, p3))
       {
         if(pMesh.isTextured)
         {
           PImage tTex = pMesh.getTexture(true);
-          tint(lambertianShading(calcNormal(point1, point2, point3), color(255,255,255)));
+          tint(lambertianShading(pMesh.normals[i/3 - 1], color(255,255,255)));
           int h = tTex.height;
           int w = tTex.width;
           beginShape();
@@ -115,7 +115,7 @@ class Renderer
         }
         else
         {
-          fill(lambertianShading(calcNormal(p1, p2, p3), pMesh.objectCol));
+          fill(lambertianShading(pMesh.normals[i/3 - 1], pMesh.objectCol));
           triangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
         }
       }
@@ -126,9 +126,9 @@ class Renderer
     }
   }
   
-  private boolean normalTest(Vector3 pPoint1, Vector3 pPoint2, Vector3 pPoint3)
+  private boolean normalTest(Mesh pMesh, int i)
   {
-    if(calcNormal(pPoint1, pPoint2, pPoint3).z > 0)
+    if(pMesh.normals[i].z > 0)
     {
       return true;
     }
@@ -142,18 +142,6 @@ class Renderer
       return true;
     }
     return false;
-  }
-  
-  private Vector3 calcNormal(Vector3 pPoint1, Vector3 pPoint2, Vector3 pPoint3)
-  {
-    Vector3 vecAB = new Vector3(pPoint2.x - pPoint1.x, pPoint2.y - pPoint1.y, pPoint2.z - pPoint1.z);
-    Vector3 vecAC = new Vector3(pPoint3.x - pPoint1.x, pPoint3.y - pPoint1.y, pPoint3.z - pPoint1.z);
-    
-    Vector3 normal = vecAC.crossProduct(vecAB);
-    
-    normal.normalize();
-    
-    return normal;
   }
   
   private Vector3 applyPerspective(Vector3 pPoint)
@@ -177,7 +165,7 @@ class Renderer
     {
       int a = 0;
       float intensity = (((Light)(lightList.get(i))).getDirection().dotProduct(pNormal));
-      ret += color(intensity * (red(pObjectCol) + red(((Light)(lightList.get(i))).lColor)) + red(ambientCol));
+      ret += color(intensity * (brightness(pObjectCol) + brightness(((Light)(lightList.get(i))).lColor)) + brightness(ambientCol));
     }
     return ret;
   }
