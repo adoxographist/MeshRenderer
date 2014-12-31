@@ -22,7 +22,7 @@ void setup()
   render = new Renderer(cam, ambientCol);
   render.addLight(l);
   int[] anim = {4,4};
-  s = new Sprite(new Vector3(50, 0, 200), 0, new Vector3(100), loadImage("walk.png"), anim, 0.2, "pingpong", true);
+  s = new Sprite(new Vector3(50, 0, 200), 0, new Vector3(100), loadImage("walk.png"), anim, 0.2, "normal", true);
   p = new Plane(new Vector3(50, 0, 200), new Vector3(0), new Vector3(200), loadImage("tex.png"));
   c = new Cube(new Vector3(0, 100, 150), new Vector3(0), new Vector3(100), tex);
   c1 = new Cube(new Vector3(10, 0, 100), new Vector3(0), new Vector3(100), tex);
